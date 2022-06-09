@@ -12,7 +12,9 @@ ENV JUPYTERHUB_OAUTH_CLIENT_SECRET ${JUPYTERHUB_OAUTH_CLIENT_SECRET}
 ENV JUPYTERHUB_LOCAL_NOTEBOOK_IMAGE ${JUPYTERHUB_LOCAL_NOTEBOOK_IMAGE}
 ENV JUPYTERHUB_ENABLE_NVIDIA ${JUPYTERHUB_ENABLE_NVIDIA}
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+#RUN curl -sL https://deb.nodesource.com/setup_10.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_14.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
 
 RUN apt update -yqq && \
     apt-get install -y nodejs

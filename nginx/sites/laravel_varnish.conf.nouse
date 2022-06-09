@@ -1,0 +1,61 @@
+server {
+    server_name mobilestudio.com;
+
+    listen 81;
+    listen [::]:81;
+
+    root /var/www/mobilestudio/www;
+
+    index index.php index.html index.htm;
+
+    location / {
+         try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+    location ~ \.php$ {
+        fastcgi_max_temp_file_size 4m;
+        fastcgi_pass php-upstream;
+
+        # Additional configs
+        fastcgi_pass_header Set-Cookie;
+        fastcgi_pass_header Cookie;
+        fastcgi_ignore_headers Cache-Control Expires Set-Cookie;
+        try_files $uri /index.php =404;
+        fastcgi_index index.php;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_param  PATH_INFO $fastcgi_path_info;
+        fastcgi_param  PATH_TRANSLATED $document_root$fastcgi_path_info;
+        fastcgi_param HTTPS on;
+
+        fastcgi_buffers 16 16k;
+        fastcgi_buffer_size 32k;
+
+        fastcgi_intercept_errors on;
+
+        #fixes timeouts
+        fastcgi_read_timeout 600;
+        include fastcgi_params;
+    }
+
+    # Caching
+    location ~* \.(ico|jpg|webp|jpeg|gif|css|png|js|ico|bmp|zip|woff)$ {
+        access_log off;
+        log_not_found off;
+        add_header Pragma public;
+        add_header Cache-Control "public";
+        expires 14d;
+    }
+
+    location ~* \.(php|html)$ {
+        access_log on;
+        log_not_found on;
+        add_header Pragma public;
+        add_header Cache-Control "public";
+        expires 14d;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
