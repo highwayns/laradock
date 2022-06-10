@@ -26,4 +26,6 @@ RUN pip install oauthenticator
 RUN pip install dockerspawner
 RUN pip install psycopg2 psycopg2-binary
 
+#RUN jupyter labextension install @jupyterlab/hub-extension
+
 CMD ["sh", "-c", "jupyterhub upgrade-db && jupyterhub -f /jupyterhub_config.py"]

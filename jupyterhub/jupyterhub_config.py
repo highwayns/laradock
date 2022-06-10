@@ -90,10 +90,13 @@ c.JupyterHub.port = 80
 # c.JupyterHub.ssl_cert = os.environ['SSL_CERT']
 
 # Authenticate users with GitHub OAuth
-c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
-c.GitHubOAuthenticator.oauth_callback_url = os.environ['JUPYTERHUB_OAUTH_CALLBACK_URL']
-c.GitHubOAuthenticator.client_id = os.environ['JUPYTERHUB_OAUTH_CLIENT_ID']
-c.GitHubOAuthenticator.client_secret = os.environ['JUPYTERHUB_OAUTH_CLIENT_SECRET']
+#c.JupyterHub.authenticator_class = 'oauthenticator.GitHubOAuthenticator'
+#c.GitHubOAuthenticator.oauth_callback_url = os.environ['JUPYTERHUB_OAUTH_CALLBACK_URL']
+#c.GitHubOAuthenticator.client_id = os.environ['JUPYTERHUB_OAUTH_CLIENT_ID']
+#c.GitHubOAuthenticator.client_secret = os.environ['JUPYTERHUB_OAUTH_CLIENT_SECRET']
+
+from oauthenticator.gitlab import LocalGitLabOAuthenticator
+c.JupyterHub.authenticator_class = LocalGitLabOAuthenticator
 
 # Persist hub data on volume mounted inside container
 data_dir = '/data'
@@ -126,3 +129,5 @@ with open(os.path.join(pwd, 'userlist')) as f:
         if len(parts) > 1 and parts[1] == 'admin':
             admin.add(name)
 admin.add('laradock')
+admin.add('zhengjun')
+admin.add('tei952')

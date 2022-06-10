@@ -1139,10 +1139,10 @@ services:
         - ${NGINX_SSL_PATH}:/var/certs
         - ./certbot/letsencrypt/:/var/www/letsencrypt
       environment:
-        - MOBILESTDIO="mobilestudio.com"
-        - PAYMENTGATEWAY="paymentgateway.com"
-        - PARK="park.highwayns.net"
-        - EMAIL="tei952@gmail.com"
+        - MOBILESTDIO=mobilestudio.com
+        - PAYMENTGATEWAY=paymentgateway.com
+        - PARK=park.highwayns.net
+        - EMAIL=tei952@gmail.com
       networks:
         - frontend
 
@@ -1543,6 +1543,10 @@ services:
         - JUPYTERHUB_OAUTH_CLIENT_SECRET=${JUPYTERHUB_OAUTH_CLIENT_SECRET}
         - JUPYTERHUB_LOCAL_NOTEBOOK_IMAGE=${COMPOSE_PROJECT_NAME}_jupyterhub-user
         - JUPYTERHUB_ENABLE_NVIDIA=${JUPYTERHUB_ENABLE_NVIDIA}
+        - GITLAB_URL=http://192.168.1.3:8989
+        - OAUTH_CALLBACK_URL=http://192.168.1.3:9991/hub/oauth_callback
+        - GITLAB_CLIENT_ID=3c7dbcb36e125400628822ed6b316d80409fa33f00425480dce4cf4b93a45578
+        - GITLAB_CLIENT_SECRET=9ef3824541e9eddf88d8e0eb987e1ae29171bb426f169235be1314aa2cab752c
     jupyterhub-user:
       build:
         context: ./jupyterhub
