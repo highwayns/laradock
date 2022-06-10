@@ -1136,11 +1136,13 @@ services:
       build:
         context: ./certbot
       volumes:
-        - ./data/certbot/certs/:/var/certs
+        - ${NGINX_SSL_PATH}:/var/certs
         - ./certbot/letsencrypt/:/var/www/letsencrypt
       environment:
-        - CN="fake.domain.com"
-        - EMAIL="fake.email@gmail.com"
+        - MOBILESTDIO="mobilestudio.com"
+        - PAYMENTGATEWAY="paymentgateway.com"
+        - PARK="park.highwayns.net"
+        - EMAIL="tei952@gmail.com"
       networks:
         - frontend
 
