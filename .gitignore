@@ -27,4 +27,5 @@ docker-compose.custom.yml
 .DS_Store
 
 /saleor-platform
-/horserace
+/horserace/*
+!/horserace/airflow.cfg
