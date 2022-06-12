@@ -2559,7 +2559,7 @@ services:
           - frontend
           - backend
       volumes:
-        - ./react:/usr/src/app/react
+        - ../blockchain/finder:/usr/src/app/react
         - /usr/src/app/react/node_modules
 
 ### terra_station #####################################################
@@ -2576,7 +2576,39 @@ services:
           - frontend
           - backend
       volumes:
-        - ./react:/usr/src/app/react
+        - ../blockchain/Station:/usr/src/app/react
+        - /usr/src/app/react/node_modules
+
+### terra_relayer #####################################################
+    terra_relayer:
+      build:
+        context: ../blockchain/Relayer
+      ports:
+        - "${TERRA_RELAYER_PORT}:3000"
+      container_name: terra_relayer
+      stdin_open: true
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+      networks:
+          - frontend
+          - backend
+      volumes:
+        - ../blockchain/Relayer/terra:/usr/src/app/react
+        - /usr/src/app/react/node_modules
+
+### terra_extension #####################################################
+    terra_extension:
+      build:
+        context: ../blockchain/extension
+      container_name: terra_extension
+      tty: true
+      stdin_open: true
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+      networks:
+          - backend
+      volumes:
+        - ../blockchain/extension:/usr/src/app/react
         - /usr/src/app/react/node_modules
 
 ### go ###########################################
