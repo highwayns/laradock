@@ -5,6 +5,14 @@ networks:
     driver: ${NETWORKS_DRIVER}
   backend:
     driver: ${NETWORKS_DRIVER}
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 192.168.10.0/16
+
 volumes:
   mysql:
     driver: ${VOLUMES_DRIVER}
@@ -1489,7 +1497,7 @@ services:
       extra_hosts:
         - "dockerhost:${DOCKER_HOST_IP}"
       ports:
-        - 9010:9000
+        - ${PORTAINER_PORT}:9000
       networks:
         - backend
 
@@ -2101,7 +2109,7 @@ services:
     kafka:
       image: wurstmeister/kafka
       ports:
-        - "9092:9092"
+        - "9094:9092"
       environment:
         KAFKA_BROKER_ID: 1
         KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
@@ -2462,3 +2470,77 @@ services:
       ports:
         - 8081:8081
   
+### dotnet ###########################################
+    dotnet:
+      image: mcr.microsoft.com/dotnet/sdk:6.0
+      tty: true
+      depends_on:
+        - mssql
+      networks:
+        - backend
+      volumes:
+        - /home/tei952/horserace/src/dotnet:/home/tei952/horserace/src/dotnet
+
+### terradnode0 ###########################################
+    terradnode0:
+      container_name: terradnode0
+      build: ../blockchain/Server
+      ports:
+        - "9090:9090"
+        - "26656-26657:26656-26657"
+      environment:
+        - ID=0
+        - LOG=$${LOG:-terrad.log}
+      volumes:
+        - ./build:/terrad:Z
+      networks:
+        localnet:
+          ipv4_address: 192.168.10.2
+
+### terradnode1 ###########################################
+    terradnode1:
+      container_name: terradnode1
+      build: ../blockchain/Server
+      ports:
+        - "9091:9090"
+        - "26659-26660:26656-26657"
+      environment:
+        - ID=1
+        - LOG=$${LOG:-terrad.log}
+      volumes:
+        - ./build:/terrad:Z
+      networks:
+        localnet:
+          ipv4_address: 192.168.10.3
+
+### terradnode2 ###########################################
+    terradnode2:
+      container_name: terradnode2
+      build: ../blockchain/Server
+      environment:
+        - ID=2
+        - LOG=$${LOG:-terrad.log}
+      ports:
+        - "9092:9090"
+        - "26661-26662:26656-26657"
+      volumes:
+        - ./build:/terrad:Z
+      networks:
+        localnet:
+          ipv4_address: 192.168.10.4
+
+### terradnode3 ###########################################
+    terradnode3:
+      container_name: terradnode3
+      build: ../blockchain/Server
+      environment:
+        - ID=3
+        - LOG=$${LOG:-terrad.log}
+      ports:
+        - "9093:9090"
+        - "26663-26664:26656-26657"
+      volumes:
+        - ./build:/terrad:Z
+      networks:
+        localnet:
+          ipv4_address: 192.168.10.5
