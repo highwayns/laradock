@@ -2544,3 +2544,38 @@ services:
       networks:
         localnet:
           ipv4_address: 192.168.10.5
+
+### terra_finder #####################################################
+    terra_finder:
+      build:
+        context: ../blockchain/finder
+      ports:
+        - "${TERRA_FINDER_PORT}:3000"
+      container_name: terra_finder
+      stdin_open: true
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+      networks:
+          - frontend
+          - backend
+      volumes:
+        - ./react:/usr/src/app/react
+        - /usr/src/app/react/node_modules
+
+### terra_station #####################################################
+    terra_station:
+      build:
+        context: ../blockchain/Station
+      ports:
+        - "${TERRA_STATION_PORT}:3000"
+      container_name: terra_station
+      stdin_open: true
+      environment:
+        - CHOKIDAR_USEPOLLING=true
+      networks:
+          - frontend
+          - backend
+      volumes:
+        - ./react:/usr/src/app/react
+        - /usr/src/app/react/node_modules
+
