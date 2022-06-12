@@ -1,10 +1,11 @@
-FROM node:10
+FROM node:14
 
 WORKDIR /usr/src/app/react
 
 COPY package*.json ./
 
-RUN npm install node-sass && npm install
+RUN yarn
+#RUN npm install -D sass && npm install
 
 EXPOSE 3000
 

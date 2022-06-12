@@ -2085,7 +2085,7 @@ services:
       build:
         context: ./react
       ports:
-        - "3000:3000"
+        - "${REACT_PORT}:3000"
       container_name: react
       stdin_open: true
       environment:
