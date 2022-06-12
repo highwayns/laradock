@@ -678,10 +678,10 @@ services:
         - CONFLUENCE_POSTGRES_DB=${CONFLUENCE_POSTGRES_DB}
         - CONFLUENCE_POSTGRES_USER=${CONFLUENCE_POSTGRES_USER}
         - CONFLUENCE_POSTGRES_PASSWORD=${CONFLUENCE_POSTGRES_PASSWORD}
-        - SALOR_POSTGRES_INIT=${SALOR_POSTGRES_INIT}
-        - SALOR_POSTGRES_DB=${SALOR_POSTGRES_DB}
-        - SALOR_POSTGRES_USER=${SALOR_POSTGRES_USER}
-        - SALOR_POSTGRES_PASSWORD=${SALOR_POSTGRES_PASSWORD}
+        - SALEOR_POSTGRES_INIT=${SALEOR_POSTGRES_INIT}
+        - SALEOR_POSTGRES_DB=${SALEOR_POSTGRES_DB}
+        - SALEOR_POSTGRES_USER=${SALEOR_POSTGRES_USER}
+        - SALEOR_POSTGRES_PASSWORD=${SALEOR_POSTGRES_PASSWORD}
         - AIRFLOW_POSTGRES_INIT=${AIRFLOW_POSTGRES_INIT}
         - AIRFLOW_POSTGRES_DB=${AIRFLOW_POSTGRES_DB}
         - AIRFLOW_POSTGRES_USER=${AIRFLOW_POSTGRES_USER}
@@ -2142,10 +2142,10 @@ services:
       networks:
         - backend
 
-### salor_api ###########################################
-    salor_api:
+### saleor_api ###########################################
+    saleor_api:
       ports:
-        - ${SALOR_API_PORT}:8000
+        - ${SALEOR_API_PORT}:8000
       build:
         context: ./saleor-platform/saleor
         dockerfile: ./Dockerfile
@@ -2164,52 +2164,52 @@ services:
         - ./saleor-platform/saleor/tests/:/app/tests
         # shared volume between worker and api for media
         - saleor-media:/app/media
-      command: python manage.py runserver 0.0.0.0:${SALOR_API_PORT}
+      command: python manage.py runserver 0.0.0.0:${SALEOR_API_PORT}
       env_file:
         - ./saleor-platform/common.env
         - ./saleor-platform/backend.env
       environment:
         - JAEGER_AGENT_HOST=jaeger
-        - STOREFRONT_URL=http://localhost:${REACT_STOREFRONT_PORT}/
-        - DASHBOARD_URL=http://localhost:${SALOR_DASHBOARD_PORT}/
+        - STOREFRONT_URL=http://localhost:${SALEOR_STOREFRONT_PORT}/
+        - DASHBOARD_URL=http://localhost:${SALEOR_DASHBOARD_PORT}/
         - ALLOWED_HOSTS=localhost,api
 
-### react-storefront ###########################################
-    react-storefront:
+### saleor_storefront ###########################################
+    saleor_storefront:
       build:
         context: ./saleor-platform/react-storefront
         dockerfile: ./Dockerfile.dev
       ports:
-        - ${REACT_STOREFRONT_PORT}:3001
+        - ${SALEOR_STOREFRONT_PORT}:3001
       restart: unless-stopped
       networks:
         - backend
       depends_on:
-        - salor_api
+        - saleor_api
       volumes:
         - ./saleor-platform/react-storefront/:/app:cached
         - /app/node_modules/
       # Nginx is used to proxy SSR requests thru docker networking
       command: sh -c '(nginx &) && pnpm dev'
       environment:
-        - NEXT_PUBLIC_API_URI=http://localhost:${SALOR_API_PORT}/graphql/
+        - NEXT_PUBLIC_API_URI=http://localhost:${SALEOR_API_PORT}/graphql/
         - NEXT_PUBLIC_HOMEPAGE_MENU=navbar
 
-### salor_dashboard ###########################################
-    salor_dashboard:
+### saleor_dashboard ###########################################
+    saleor_dashboard:
       build:
         context: ./saleor-platform/saleor-dashboard
         dockerfile: ./Dockerfile.dev
       ports:
-        - ${SALOR_DASHBOARD_PORT}:9000
+        - ${SALEOR_DASHBOARD_PORT}:9000
       restart: unless-stopped
       volumes:
         - ./saleor-platform/saleor-dashboard/:/app:cached
         - /app/node_modules/
       command: npm start -- --host 0.0.0.0
 
-### salor_worker ###########################################
-    salor_worker:
+### saleor_worker ###########################################
+    saleor_worker:
       build:
         context: ./saleor-platform/saleor
         dockerfile: ./Dockerfile

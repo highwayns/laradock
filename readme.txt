@@ -12,3 +12,6 @@ docker-compose up -d rabbitmq
 
 #command for airflow
 docker-compose up -d flower airflow-cli airflow-init airflow-triggerer airflow-worker airflow-scheduler airflow-webserver
+
+#command for saleor
+docker-compose up -d saleor_api saleor_dashboard saleor_worker saleor_storefront
