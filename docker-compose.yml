@@ -2579,3 +2579,45 @@ services:
         - ./react:/usr/src/app/react
         - /usr/src/app/react/node_modules
 
+### go ###########################################
+    go:
+      image: golang:latest
+      tty: true
+      networks:
+        - backend
+
+### rust ###########################################
+    rust:
+      image: rust:latest
+      tty: true
+      networks:
+        - backend
+
+### solidity ###########################################
+    solidity:
+      build:
+        context: ./solc
+      tty: true
+      networks:
+        - backend
+
+### java ###########################################
+    java:
+      image: java:8
+      tty: true
+      networks:
+        - backend
+
+### scala ###########################################
+    scala:
+      image: hseeberger/scala-sbt:8u222_1.3.5_2.13.1
+      tty: true
+      networks:
+        - backend
+
+### spark ###########################################
+    spark:
+      image: bitnami/spark:latest
+      tty: true
+      networks:
+        - backend
