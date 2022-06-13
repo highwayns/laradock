@@ -1,0 +1,53 @@
+spring:
+  main:
+    # 起動時のバーナー表示OFF バーナーはbanner.txtで設定可能
+    banner-mode: "off"
+
+  datasource:
+#    driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#    url: jdbc:log4jdbc:hsqldb:file:db/test
+    driverClassName: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:file:db/test
+#    schema: SAMPLE
+#    username:test
+#    password:test
+    platform: hsqldb
+    # false でschema.sql,data.sqlでのデータ初期化が行われなくなる
+    initialize: false
+    # コネクションプール数
+#    max-active: 100
+#    max-idle: 20
+#    min-idle: 20
+#    initial-size: 20
+    # コネクションタイムアウト対応 hsqldbでは使用出来ない
+#    testOnBorrow: true
+#    validationQuery: SELECT 1
+
+  jpa:
+    hibernate:
+      # create-dropにするとEntity定義でテーブルが作成される
+      ddl-auto: none #create-drop
+    database: hsql
+    # 標準出力にSQLを表示するならtrue
+    show-sql: false
+
+  batch:
+    job:
+       # mainを実行した際にnamesのJobを実行するかどうか
+#      names: sendMailJob
+      enabled: false
+#    initializer:
+#      enabled: true
+
+  velocity:
+    check-template-location: false
+  mail:
+    default-encoding: UTF-8
+    protocol: smtp
+    host: 127.0.0.1
+    port: 1025
+    username: hoge
+    password: hoge
+    properties:
+      from: hoge@example.com
+
