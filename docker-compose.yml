@@ -694,6 +694,10 @@ services:
         - AIRFLOW_POSTGRES_DB=${AIRFLOW_POSTGRES_DB}
         - AIRFLOW_POSTGRES_USER=${AIRFLOW_POSTGRES_USER}
         - AIRFLOW_POSTGRES_PASSWORD=${AIRFLOW_POSTGRES_PASSWORD}
+        - DVDRENTAL_POSTGRES_INIT=${DVDRENTAL_POSTGRES_INIT}
+        - DVDRENTAL_POSTGRES_DB=${DVDRENTAL_POSTGRES_DB}
+        - DVDRENTAL_POSTGRES_USER=${DVDRENTAL_POSTGRES_USER}
+        - DVDRENTAL_POSTGRES_PASSWORD=${DVDRENTAL_POSTGRES_PASSWORD}
       healthcheck:
         test: ["CMD", "pg_isready", "-U", "airflow"]
         interval: 5s
@@ -2653,3 +2657,17 @@ services:
       tty: true
       networks:
         - backend
+
+### springboot ###########################################
+    springboot:
+      build:
+        context: ./springboot
+      ports:
+        - "${SPRING_WEB_PORT}:8080"
+        - "${SPRING_SERVICE_PORT}:8090"
+      networks:
+        - backend
+      tty: true
+      volumes:
+        - ./springboot:/usr/src/app/springboot
+      # command: pg_restore -U ${DVDRENTAL_POSTGRES_USER} -d DVDRENTAL ./DB/dvdrental.tar
