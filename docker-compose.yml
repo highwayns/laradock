@@ -2670,4 +2670,4 @@ services:
       tty: true
       volumes:
         - ./springboot:/usr/src/app/springboot
-      # command: pg_restore -U ${DVDRENTAL_POSTGRES_USER} -d DVDRENTAL ./DB/dvdrental.tar
+      # command: pg_restore -h postgres -U rental -d rental -Wrental ./DB/dvdrental.tar
