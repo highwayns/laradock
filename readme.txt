@@ -15,3 +15,6 @@ docker-compose up -d flower airflow-cli airflow-init airflow-triggerer airflow-w
 
 #command for saleor
 docker-compose up -d saleor_api saleor_dashboard saleor_worker saleor_storefront
+
+#command for terra
+docker-compose up -d terradnode0 terradnode1 terradnode2 terradnode3 terra_finder terra_station terra_relayer terra_extension
