@@ -2699,7 +2699,7 @@ services:
       environment:
         # JAVA_OPTS: "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -noverify"
         SPRING_JMX_ENABLED: "false"
-        ACT_KEYCLOAK_URL: "http://keycloak/auth"
+        ACT_KEYCLOAK_URL: "http://${DOCKER_IP}/auth"
         SPRING_RABBITMQ_HOST: "rabbitmq"
         SERVER_SERVLET_CONTEXT_PATH: /rb
         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/activitidb
@@ -2735,7 +2735,7 @@ services:
         # JAVA_OPTS: "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -noverify"
         SPRING_JMX_ENABLED: "false"
         SPRING_RABBITMQ_HOST: "rabbitmq"
-        ACT_KEYCLOAK_URL: "http://keycloak/auth"
+        ACT_KEYCLOAK_URL: "http://${DOCKER_IP}/auth"
       restart: unless-stopped
       depends_on:
         - nginx
@@ -2752,7 +2752,7 @@ services:
         # JAVA_OPTS: "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -noverify"
         SPRING_JMX_ENABLED: "false"
         SPRING_RABBITMQ_HOST: "rabbitmq"
-        ACT_KEYCLOAK_URL: "http://keycloak/auth"
+        ACT_KEYCLOAK_URL: "http://${DOCKER_IP}/auth"
         SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/activitidb
         SPRING_DATASOURCE_USERNAME: activiti
         SPRING_DATASOURCE_PASSWORD: mypassword
@@ -2787,7 +2787,7 @@ services:
       container_name: activiti-cloud-modeling
       #image: activiti/activiti-modeling-app:7.2.3
       #image: alfresco/alfresco-apps:latest
-      image: activiti/activiti-modeling-app:7.3.0
+      image: activiti/activiti-modeling-app:7.1.0-M13
       environment:
         # JAVA_OPTS: "-Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -noverify"
         APP_CONFIG_OAUTH2_HOST: "http://${DOCKER_IP}/auth/realms/${KEYCLOAK_REALM}"
@@ -2809,8 +2809,8 @@ services:
         SUPERADMIN_PASSWORD: superadmin
         DEVOPS_EMAIL: devops
         DEVOPS_PASSWORD: devops
-        MODELER_EMAIL: modeler
-        MODELER_PASSWORD: modeler
+        MODELER_EMAIL: admin
+        MODELER_PASSWORD: admin
         PROCESS_ADMIN_EMAIL: processadmin
         PROCESS_ADMIN_PASSWORD: processadmin
         HR_USER: hruser
@@ -2824,15 +2824,16 @@ services:
 
     activiti-cloud-modeling-backend:
       container_name: activiti-cloud-modeling-backend
-      image: activiti/activiti-cloud-modeling:7.3.0-alpha.16
+      image: activiti/activiti-cloud-modeling:7.1.0-M13
       environment:
         JAVA_OPTS:                    -Xmx1024m -Xms512m -XX:+UnlockExperimentalVMOptions   -Dsun.zip.disableMemoryMapping=true -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
         SPRING_APPLICATION_NAME:      modeling-service
         SERVER_PORT:                  8080
-        ACT_KEYCLOAK_URL:             http://keycloak/auth
+        ACT_KEYCLOAK_URL:             http://${DOCKER_IP}/auth
         ACT_KEYCLOAK_REALM:           ${KEYCLOAK_REALM}
         ACT_KEYCLOAK_RESOURCE:        ${KEYCLOAK_RESOURCE}
         ACTIVITI_CLOUD_MODELING_URL:  localhost:8080
         SERVER_SERVLET_CONTEXT_PATH:  /modeling-service
       networks:
         - backend
+        - frontend
