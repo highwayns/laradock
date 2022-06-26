@@ -29,3 +29,5 @@ docker-compose.custom.yml
 /saleor-platform
 /horserace/*
 !/horserace/airflow.cfg
+
+/activiti-cloud-modeling-standalone

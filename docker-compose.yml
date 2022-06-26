@@ -1514,6 +1514,7 @@ services:
       build:
         context: ./gitlab
       environment:
+        GITLAB_SKIP_UNMIGRATED_DATA_CHECK: "true"
         GITLAB_OMNIBUS_CONFIG: |
           external_url '${GITLAB_DOMAIN_NAME}'
           redis['enable'] = false
@@ -2864,3 +2865,12 @@ services:
       networks:
         - backend
         - frontend
+
+    activiti-standalone:
+      build:
+        context: ./activiti-cloud-modeling-standalone
+      ports:
+        - "${ACTIVITI_SERVER_PORT}:8080"
+      networks:
+        - backend
+      tty: true

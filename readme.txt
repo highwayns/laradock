@@ -24,3 +24,6 @@ docker-compose up -d swagger-editor swagger-ui
 
 #command for activiti
 docker-compose up -d keycloak example-runtime-bundle example-cloud-connector activiti-cloud-query activiti-cloud-modeling activiti-cloud-modeling-backend
+
+#command for horserace
+docker-compose up -d nginx mssql  gitlab gitlab-runner jupyterhub-user jupyterhub 
