@@ -67,6 +67,8 @@ volumes:
   saleor-redis:
     driver: ${VOLUMES_DRIVER}
   saleor-media:
+  redmine_data:
+    driver: ${VOLUMES_DRIVER}
   nexus-data: {}
 
 x-airflow-common:
@@ -2866,6 +2868,7 @@ services:
         - backend
         - frontend
 
+### activiti standalone ###############################################
     activiti-standalone:
       build:
         context: ./activiti-cloud-modeling-standalone
@@ -2875,6 +2878,7 @@ services:
         - backend
       tty: true
 
+### ebx ###############################################
     docker-ebx:
       build:
         context: ./docker-ebx
@@ -2883,3 +2887,23 @@ services:
       networks:
         - backend
       tty: true
+
+### redmine ###############################################
+    redmine:
+      image: docker.io/bitnami/redmine:5
+      ports:
+        - '${REDMINE_PORT}:3000'
+      volumes:
+        - 'redmine_data:/bitnami/redmine'
+      depends_on:
+        - mariadb
+      environment:
+        # ALLOW_EMPTY_PASSWORD is recommended only for development.
+        - ALLOW_EMPTY_PASSWORD=yes
+        - REDMINE_DATABASE_HOST=${REDMINE_DATABASE_HOST}
+        - REDMINE_DATABASE_PORT_NUMBER=${REDMINE_DATABASE_PORT_NUMBER}
+        - REDMINE_DATABASE_USER=${REDMINE_DATABASE_USER}
+        - REDMINE_DATABASE_PASSWORD=${REDMINE_DATABASE_PASSWORD}
+        - REDMINE_DATABASE_NAME=${REDMINE_DATABASE_NAME}
+      networks:
+        - backend
