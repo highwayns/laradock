@@ -31,3 +31,5 @@ docker-compose.custom.yml
 !/horserace/airflow.cfg
 
 /activiti-cloud-modeling-standalone
+
+/docker-ebx
