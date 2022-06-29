@@ -33,3 +33,5 @@ docker-compose.custom.yml
 /activiti-cloud-modeling-standalone
 
 /docker-ebx
+
+/jhipster-sample-app
