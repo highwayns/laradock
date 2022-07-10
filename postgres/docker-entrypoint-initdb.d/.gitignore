@@ -7,3 +7,4 @@
 !init_airflow_db.sh
 !init_dvdrental_db.sh
 !init_activiti_db.sh
+!init_jhipster_db.sh

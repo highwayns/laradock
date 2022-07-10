@@ -704,6 +704,10 @@ services:
         - ACTIVITI_POSTGRES_DB=${ACTIVITI_POSTGRES_DB}
         - ACTIVITI_POSTGRES_USER=${ACTIVITI_POSTGRES_USER}
         - ACTIVITI_POSTGRES_PASSWORD=${ACTIVITI_POSTGRES_PASSWORD}
+        - JHIPSTER_POSTGRES_INIT=${JHIPSTER_POSTGRES_INIT}
+        - JHIPSTER_POSTGRES_DB=${JHIPSTER_POSTGRES_DB}
+        - JHIPSTER_POSTGRES_USER=${JHIPSTER_POSTGRES_USER}
+        - JHIPSTER_POSTGRES_PASSWORD=${JHIPSTER_POSTGRES_PASSWORD}
       healthcheck:
         test: ["CMD", "pg_isready", "-U", "airflow"]
         interval: 5s
@@ -2915,8 +2919,8 @@ services:
         - _JAVA_OPTIONS=-Xmx512m -Xms256m
         - SPRING_PROFILES_ACTIVE=prod,api-docs
         - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=false
-        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/activitidb?user=activiti&password=mypassword
-        - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres/activitidb?user=activiti&password=mypassword
+        - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/jhipstersampleapplication?user=jhipstersampleapplication&password=jhipsterSampleApplication
+        - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgres/jhipstersampleapplication?user=jhipstersampleapplication&password=jhipsterSampleApplication
         - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       # If you want to expose these ports outside your dev PC,
       # remove the "127.0.0.1:" prefix
