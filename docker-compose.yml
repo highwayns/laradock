@@ -2924,9 +2924,28 @@ services:
         - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
       # If you want to expose these ports outside your dev PC,
       # remove the "127.0.0.1:" prefix
+      depends_on:
+        - postgres
       ports:
         - ${JH_SERVER_PORT}:8080
       networks:
         - backend
         - frontend
 
+### vertex-ai-spark-ml ###############################################
+    vertex-ai-spark-ml:
+      build:
+        context: ./vertex-ai-spark-ml-serving
+      ports:
+        - "${VERTEXT_SERVER_PORT}:8080"
+      networks:
+        - backend
+      tty: true
+
+### mlops-with-vertex-ai ###############################################
+    mlops-with-vertex-ai:
+      build:
+        context: ./mlops-with-vertex-ai
+      networks:
+        - backend
+      tty: true
