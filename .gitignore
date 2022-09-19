@@ -36,3 +36,7 @@ docker-compose.custom.yml
 
 /jhipster-sample-app
 /paymentgateway
+/FinRL-Meta
+/vertex-ai-spark-ml-serving
+/mlops-with-vertex-ai
+/finrl
