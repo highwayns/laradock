@@ -696,6 +696,10 @@ services:
         - AIRFLOW_POSTGRES_DB=${AIRFLOW_POSTGRES_DB}
         - AIRFLOW_POSTGRES_USER=${AIRFLOW_POSTGRES_USER}
         - AIRFLOW_POSTGRES_PASSWORD=${AIRFLOW_POSTGRES_PASSWORD}
+        - MLFLOW_POSTGRES_INIT=${MLFLOW_POSTGRES_INIT}
+        - MLFLOW_POSTGRES_DB=${MLFLOW_POSTGRES_DB}
+        - MLFLOW_POSTGRES_USER=${MLFLOW_POSTGRES_USER}
+        - MLFLOW_POSTGRES_PASSWORD=${MLFLOW_POSTGRES_PASSWORD}
         - DVDRENTAL_POSTGRES_INIT=${DVDRENTAL_POSTGRES_INIT}
         - DVDRENTAL_POSTGRES_DB=${DVDRENTAL_POSTGRES_DB}
         - DVDRENTAL_POSTGRES_USER=${DVDRENTAL_POSTGRES_USER}
@@ -2969,3 +2973,48 @@ services:
       networks:
         - backend
       tty: true
+
+### mlflow ###############################################
+    mlflow:
+      build:
+        context: ./mlflow/docker
+        args:
+          - POSTGRES_USER=${MLFLOW_POSTGRES_USER}
+          - POSTGRES_PASSWORD=${MLFLOW_POSTGRES_PASSWORD}
+          - DB_HOST=${MLFLOW_POSTGRES_HOST}
+          - DB_NAME=${MLFLOW_POSTGRES_DB}
+          - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@${DOCKER_HOST_IP}/artifact_location
+      ports:
+        - "${MLFLOW_WEBSERVER_PORT}:5000"
+      networks:
+        - backend
+        - frontend
+      restart: always
+      depends_on:
+        - postgres
+        - waitfordb
+
+### waitfordb ###############################################
+    waitfordb:
+        image: dadarek/wait-for-dependencies
+        depends_on:
+          - postgres
+        restart: always
+        command: postgres:${POSTGRES_PORT}
+
+### ftp-server ###############################################
+    ftp-server:
+      image: stilliard/pure-ftpd:latest
+      container_name: ftp-server
+      ports:
+        - "21:21"
+        - "30000-30009:30000-30009"
+      volumes:
+        - $PWD/ftp/data:/home/ftpusers
+      environment:
+        - PUBLICHOST=localhost
+        - FTP_USER_NAME=${FTP_USER_NAME}
+        - FTP_USER_PASS=${FTP_USER_PASS}
+        - FTP_USER_HOME=/home/ftpusers
+        - ADDED_FLAGS="--tls=2"
+      restart: always        

@@ -5,6 +5,7 @@
 !init_confluence_db.sh
 !init_saleor_db.sh
 !init_airflow_db.sh
+!init_mlflow_db.sh
 !init_dvdrental_db.sh
 !init_activiti_db.sh
 !init_jhipster_db.sh
