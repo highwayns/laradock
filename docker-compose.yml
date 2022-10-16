@@ -2983,7 +2983,7 @@ services:
           - POSTGRES_PASSWORD=${MLFLOW_POSTGRES_PASSWORD}
           - DB_HOST=${MLFLOW_POSTGRES_HOST}
           - DB_NAME=${MLFLOW_POSTGRES_DB}
-          - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@${DOCKER_HOST_IP}/artifact_location
+          - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@ftp-server/artifact_location
       ports:
         - "${MLFLOW_WEBSERVER_PORT}:5000"
       networks:
@@ -2999,6 +2999,8 @@ services:
         image: dadarek/wait-for-dependencies
         depends_on:
           - postgres
+        networks:
+          - backend
         restart: always
         command: postgres:${POSTGRES_PORT}
 
@@ -3017,4 +3019,6 @@ services:
         - FTP_USER_PASS=${FTP_USER_PASS}
         - FTP_USER_HOME=/home/ftpusers
         - ADDED_FLAGS="--tls=2"
+      networks:
+        - backend
       restart: always        
