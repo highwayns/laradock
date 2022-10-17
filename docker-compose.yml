@@ -3006,7 +3006,9 @@ services:
 
 ### ftp-server ###############################################
     ftp-server:
-      image: stilliard/pure-ftpd:latest
+      #image: stilliard/pure-ftpd:latest
+      build:
+        context: ./docker-pure-ftpd
       container_name: ftp-server
       ports:
         - "21:21"

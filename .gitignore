@@ -41,3 +41,4 @@ docker-compose.custom.yml
 /mlops-with-vertex-ai
 /finrl
 /mlflow
+/docker-pure-ftpd
