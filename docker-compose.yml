@@ -2972,6 +2972,19 @@ services:
         - "${FINRL_SERVER_PORT}:8888"
       networks:
         - backend
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 2
+                capabilities: [gpu]
+      environment:
+        - NVIDIA_VISIBLE_DEVICES=all
+      volumes:
+        - /home/tei952/horserace/data:/src/horserace/data
+        - /home/tei952/horserace/src:/src/horserace/src
+        - /home/tei952/laradock/mlflow:/src/mlflow
       tty: true
 
 ### mlflow ###############################################
@@ -2986,6 +2999,15 @@ services:
           - DEFAULT_ARTIFACT_ROOT=ftp://${FTP_USER_NAME}:${FTP_USER_PASS}@ftp-server/artifact_location
       ports:
         - "${MLFLOW_WEBSERVER_PORT}:5000"
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 2
+                capabilities: [gpu]
+      environment:
+        - NVIDIA_VISIBLE_DEVICES=all
       networks:
         - backend
         - frontend
@@ -3023,4 +3045,74 @@ services:
         - ADDED_FLAGS="--tls=2"
       networks:
         - backend
-      restart: always        
+      restart: always    
+
+### sqlserver ###############################################
+    sqlserver:
+      image: tei952/sqlserver_image:0.0.2
+      user: root
+      expose:
+        - 1433
+      ports:
+        - 1433:1433
+      healthcheck:
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "56CFUVzh" -Q "SELECT 1" || exit 1
+        interval: 10s
+        timeout: 3s
+        retries: 10
+        start_period: 10s
+      environment:
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=56CFUVzh
+        - MSSQL_PID=Express
+        - MSSQL_LCID=1041
+        - MSSQL_COLLATION=Japanese_CI_AS
+        - DB_NAME=DEMO
+      volumes:
+        - ../horserace/docker/mssqlserver/initdb.d:/docker-entrypoint-initdb.d
+        - ../horserace/docker/mssqlserver/data:/var/opt/mssql/data
+        - ../horserace/docker/mssqlserver/log:/var/opt/mssql/log
+        - ../horserace/docker/mssqlserver/secrets:/var/opt/mssql/sec      
+
+### HorseRace ###############################################
+    horserace:
+      image: tei952/optuna_image:0.0.2
+      ports:
+        - "${HORSERACE_OPTUNA_PORT}:6006"
+        - "${HORSERACE_MLFLOW_PORT}:8888"
+      networks:
+        - backend
+      tty: true
+      working_dir: "/workspace"
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 2
+                capabilities: [gpu]
+      environment:
+        - NVIDIA_VISIBLE_DEVICES=all
+      volumes:
+        - /home/tei952/horserace/data:/home/tei952/horserace/data
+        - /home/tei952/horserace/src:/home/tei952/horserace/src
+
+### Gpu ###############################################
+    gpu:
+      image: laradock_gpu:latest
+      networks:
+        - backend
+      tty: true
+      working_dir: "/work"
+      deploy:
+        resources:
+          reservations:
+            devices:
+              - driver: nvidia
+                count: 2
+                capabilities: [gpu]
+      environment:
+        - NVIDIA_VISIBLE_DEVICES=all
+      volumes:
+        - /home/tei952/horserace/data:/home/tei952/horserace/data
+        - /home/tei952/horserace/src:/home/tei952/horserace/src
