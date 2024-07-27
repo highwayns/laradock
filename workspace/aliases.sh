@@ -71,6 +71,11 @@ alias rollback="php artisan migrate:rollback"
 alias seed="php artisan db:seed"
 alias serve="php artisan serve --quiet &"
 
+alias pint="./vendor/bin/pint"
+alias pest="./vendor/bin/pest"
+alias phpstan="./vendor/bin/phpstan"
+alias php-cs-fixer="./vendor/bin/php-cs-fixer"
+
 alias phpunit="./vendor/bin/phpunit"
 alias pu="phpunit"
 alias puf="phpunit --filter"
@@ -148,3 +153,14 @@ function fs() {
 		du $arg .[^.]* ./*;
 	fi;
 }
+
+# Add artisan autocomplete
+function _artisan()
+{
+	COMP_WORDBREAKS=${COMP_WORDBREAKS//:}
+	COMMANDS=`php artisan --raw --no-ansi list | sed "s/[[:space:]].*//g"`
+	COMPREPLY=(`compgen -W "$COMMANDS" -- "${COMP_WORDS[COMP_CWORD]}"`)
+	return 0
+}
+complete -F _artisan art
+complete -F _artisan artisan
